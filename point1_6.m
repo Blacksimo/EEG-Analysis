@@ -8,7 +8,7 @@ open_eyes_record = open_eyes_record(1:64,:);
 Y = open_eyes_record(1:64,:);
 
 [DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Y, 30, 160);
-freqRange = 8:13;
+freqRange = 14:30;
 mPDC = mean(real(PDC(:,:,freqRange)), 3);
 mPDC = mPDC-triu(tril(mPDC));
 
@@ -98,3 +98,8 @@ caxis([0 MaxValue])
 axis square
 
 %%%%%%%%%%%%%%%%%%% Fine punto 1.2 %%%%%%%%%%%%%%%%%%%
+
+
+
+% gObj = biograph(adjacency_matrix_pdc,open_eyes_header.label(1:64));
+% gObj = view(gObj);

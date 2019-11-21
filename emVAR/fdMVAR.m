@@ -21,14 +21,15 @@
 % P= Inverse Spectral Matrix (Eq. 7)
 % f= frequency vector
 
-function [DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Am,Su,N,Fs)
+function [DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Am,N,Fs,Su)
 
 M= size(Am,1); % Am has dim M*pM
 p = size(Am,2)/M; % p is the order of the MVAR model
 
-if nargin<2, Su = eye(M,M); end; % if not specified, we assume uncorrelated noises with unit variance as inputs 
-if nargin<3, N = 512; end;
-if nargin<4, Fs= 1; end;     
+%if nargin<2, Su = eye(M,M); end; % if not specified, we assume uncorrelated noises with unit variance as inputs 
+if nargin<2, N = 512; end;
+if nargin<3, Fs= 1; end;     
+if nargin<4, Su = eye(M,M); end; % if not specified, we assume uncorrelated noises with unit variance as inputs 
 if all(size(N)==1),	 %if N is scalar
     f = (0:N-1)*(Fs/(2*N)); % frequency axis
 else            % if N is a vector, we assume that it is the vector of the frequencies

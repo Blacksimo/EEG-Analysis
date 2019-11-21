@@ -7,11 +7,13 @@ temp = zeros();
 density=0;
 
 %%%toolbox functions from http://www.lcs.poli.usp.br/~baccala/pdc/
-nFreqs=13;          % nFreqs - number of point in [0,fs/2] frequency scale
+nFreqs=1;          % nFreqs - number of point in [0,fs/2] frequency scale
 metric = 'euc';     % euc  - Euclidean ==> original PDC
-freqRange = [8:13]; 
-PDC = pdc_alg(Y,nFreqs,metric,1,1,3,0.2);
-mPDC = mean(PDC.pdc_th(:,:,freqRange),3)'; 
+% freqRange = [8:13]; 
+tic
+PDC = pdc_alg(Y,nFreqs,metric,3);
+toc
+mPDC = mean(PDC.pdc,3)'; 
 mPDC = mPDC-triu(tril(mPDC)); %% deletion of the main diagonal
 % 
 % while density~=0.20
@@ -51,7 +53,9 @@ mPDC = mPDC-triu(tril(mPDC)); %% deletion of the main diagonal
 % 
 % mDTF = mean(DTF.dtf,3)'; 
 % mDTF = mDTF-triu(tril(mDTF));  %% deletion of the main diagonal
-% MaxValue = max([max(max(mPDC)) max(max(mDTF))]);
+MaxValue = max([max(max(mPDC)) ...
+    %max(max(mDTF))
+    ]);
 
 
 figure; 
