@@ -11,7 +11,8 @@ chosen_index = zeros();
 Y = [];
 
 for i=1:size(chosen_channels,2)
-    index = find(strcmp(open_eyes_header.label, chosen_channels{1,i}));
+    index = find(strcmp(chosen_channels{1,i}, open_eyes_header.label));
+    chosen_index(i) = index;
     Y = [Y; open_eyes_record(index,:)];
 end
 
@@ -59,7 +60,46 @@ fileID = fopen('channel_locations.txt','r');
 data=textscan(fileID,'%u%s%f%f');
 fclose(fileID);
 
+
+
+chosen_index = sort(chosen_index);
 gObj = biograph(adjacency_matrix_pdc, chosen_channels);
+
 for i=1:nNodes
-   gObj.Nodes(i).Position = [data{3}(
+    index = find(strcmp(gObj.Nodes(i).ID , open_eyes_header.label));
+    gObj.nodes(i).Position = [data{3}(index) , data{4}(index) ];
+%     gObj.nodes(i)
+%     gObj.nodes(i).Position
 end
+% gObj.nodes(i).Position
+dolayout(gObj, 'Pathsonly', false);
+view(gObj);
+
+%%prova con digraph
+
+%%FUNZIONAAAA AHAHHAHAHA GOOOOOOODOOOOO
+
+G = digraph(adjacency_matrix_pdc, chosen_channels);
+x=[];
+y=[];
+for i=1:nNodes
+    index = find(strcmp(gObj.Nodes(i).ID , open_eyes_header.label));
+    x = [x,data{3}(index)];
+    y = [y,data{4}(index)];
+end
+h = plot(G);
+h.NodeColor = 'r';
+h.MarkerSize = 8;
+h.XData = x;
+h.YData = y;
+
+
+
+% chosen_index = sort(chosen_index);
+% G = graph(adjacency_matrix_pdc, chosen_channels);
+% 
+% view(G);
+
+
+
+

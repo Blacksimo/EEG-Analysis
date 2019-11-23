@@ -1,7 +1,7 @@
 clear
 addpath(genpath('emVAR'))
 nNodes = 19;
-freqRange = 8:13;
+freqRange = 8:13; % cambio frequenze beta 13-30
 [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
 open_eyes_annotation = open_eyes_record(65,:);
 open_eyes_record = open_eyes_record(1:64,:);
@@ -64,6 +64,7 @@ chosen_index = sort(chosen_index);
 gObj = biograph(adjacency_matrix_pdc, chosen_channels);
 for i=1:nNodes
     index = find(strcmp(gObj.Nodes(i).ID , open_eyes_header.label));
-   gObj.Nodes(i).Position = [data{3}(index) data{4}(index)];
+   gObj.nodes(i).Position = [data{3}(index) data{4}(index)];
 end
 view(gObj);
+
