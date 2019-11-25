@@ -150,8 +150,3 @@ channel_table_totaldegree = struct2table(channel_struct);
 channel_table_totaldegree = sortrows(channel_table_totaldegree, 'totaldegree', 'descend'); 
 display(channel_table_totaldegree(1:10,:));
 
-scatter(in_degree, out_degree')
-set(gca,'XTick',1:4:nNodes)
-set(gca,'YTick',1:4:nNodes)
-
-
