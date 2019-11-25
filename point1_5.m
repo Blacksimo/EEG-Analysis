@@ -47,20 +47,20 @@ while 1
     end 
     L_tot = nNodes *(nNodes -1);
     density = used_nodes/L_tot;
-    if density>0.19 && density<0.21
+    if density>0.49 && density<0.51
        break; 
     end
     
     %display(density);
     threshold_pdc = threshold_pdc - 0.0005;
 end
+% Removing points on the main diagonal
+adjacency_matrix_pdc = adjacency_matrix_pdc-triu(tril(adjacency_matrix_pdc));
 mPDC = temp;
 
 fileID = fopen('channel_locations.txt','r');
 data=textscan(fileID,'%u%s%f%f');
 fclose(fileID);
-
-
 
 chosen_index = sort(chosen_index);
 gObj = biograph(adjacency_matrix_pdc, chosen_channels);
@@ -68,16 +68,9 @@ gObj = biograph(adjacency_matrix_pdc, chosen_channels);
 for i=1:nNodes
     index = find(strcmp(gObj.Nodes(i).ID , open_eyes_header.label));
     gObj.nodes(i).Position = [data{3}(index) , data{4}(index) ];
-%     gObj.nodes(i)
-%     gObj.nodes(i).Position
 end
-% gObj.nodes(i).Position
 dolayout(gObj, 'Pathsonly', false);
-view(gObj);
-
-%%prova con digraph
-
-%%FUNZIONAAAA AHAHHAHAHA GOOOOOOODOOOOO
+%view(gObj);
 
 G = digraph(adjacency_matrix_pdc, chosen_channels);
 x=[];
@@ -92,14 +85,5 @@ h.NodeColor = 'r';
 h.MarkerSize = 8;
 h.XData = x;
 h.YData = y;
-
-
-
-% chosen_index = sort(chosen_index);
-% G = graph(adjacency_matrix_pdc, chosen_channels);
-% 
-% view(G);
-
-
 
 

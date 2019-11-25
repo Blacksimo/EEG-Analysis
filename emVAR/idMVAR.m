@@ -16,8 +16,8 @@
 function [Am,S,Yp,Up]=idMVAR(Y,p,Mode);
 
 % error(nargchk(1,3,nargin));
-% if nargin < 3, Mode=0; end % default use least squares estimate
-% if nargin < 2, p=10; end % default model order
+if nargin < 3, Mode=0; end % default use least squares estimate
+if nargin < 2, p=10; end % default model order
 
 [M,N]=size(Y);
 

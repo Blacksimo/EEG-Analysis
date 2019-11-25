@@ -1,5 +1,5 @@
 clear
-addpath(genpath('emVAR'))
+%addpath(genpath('emVAR'))
 nNodes = 19;
 freqRange = 8:13; % cambio frequenze beta 13-30
 [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
@@ -16,13 +16,16 @@ for i=1:size(chosen_channels,2)
     Y = [Y; open_eyes_record(index,:)];
 end
 
-[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Y, 30, 160);
+% [DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Y, 30, 160);
+% mvar_order = size(Y,2)/size(Y,1); % p is the order of the MVAR model
+%[ARF,RCF,PE,DC,varargout] = mvar(Y,30,8);
+AR_estimate_matrix= idMVAR(Y);
 freqRange = 8:13;
 mPDC = mean(real(PDC(:,:,freqRange)), 3);
 mPDC = mPDC-triu(tril(mPDC));
-% tic
-% c=asymp_pdc(Y,mPDC,eye(nNodes,nNodes),30,'euc',0.05);
-% toc
+tic
+c=asymp_pdc(Y,AR_estimate_matrix,eye(nNodes,nNodes),30,'euc',0.05);
+toc
 
 MaxValue = max([max(max(mPDC)) ...
 %     max(max(mDTF))...
