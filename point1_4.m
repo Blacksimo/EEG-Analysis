@@ -1,34 +1,45 @@
 clear
 %addpath(genpath('emVAR'))
+load('asymp-pdc-19chan');
 nNodes = 19;
+nFreqs = 30;
+freq_samples = 160;
 freqRange = 8:13; % cambio frequenze beta 13-30
-[open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
-open_eyes_annotation = open_eyes_record(65,:);
-open_eyes_record = open_eyes_record(1:64,:);
+% Open Eyes Record
+% [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
+% open_eyes_annotation = open_eyes_record(65,:);
+% open_eyes_record = open_eyes_record(1:64,:);
+
+% Closed Eyes Record
+[closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
+closed_eyes_annotation = closed_eyes_record(65,:);
+closed_eyes_record = closed_eyes_record(1:64,:);
 
 chosen_channels = {'Fp1'  'Fp2'   'F7'   'F3'   'Fz'   'F4'   'F8'   'T7'   'C3'   'Cz'   'C4'   'T8'   'P7'   'P3'   'Pz'   'P4'  'P8'   'O1'   'O2'};
 chosen_index = zeros();
 Y = [];
 
 for i=1:size(chosen_channels,2)
-    index = find(strcmp(chosen_channels{1,i}, open_eyes_header.label));
+    index = find(strcmp(chosen_channels{1,i}, closed_eyes_header.label));
     chosen_index(i) = index;
-    Y = [Y; open_eyes_record(index,:)];
+    Y = [Y; closed_eyes_record(index,:)];
 end
 
-% [DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Y, 30, 160);
-% mvar_order = size(Y,2)/size(Y,1); % p is the order of the MVAR model
-%[ARF,RCF,PE,DC,varargout] = mvar(Y,30,8);
-AR_estimate_matrix= idMVAR(Y);
+%Y = Y';
+AR = idMVAR(Y);
+[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(AR, nFreqs, freq_samples);
 freqRange = 8:13;
 mPDC = mean(real(PDC(:,:,freqRange)), 3);
 mPDC = mPDC-triu(tril(mPDC));
+
 tic
-c=asymp_pdc(Y,AR_estimate_matrix,eye(nNodes,nNodes),30,'euc',0.05);
+c=asymp_pdc(Y,AR,eye(nNodes,nNodes),30,'euc',0.05);
 toc
+aPDC = mean(real(c.pdc_th(:,:,freqRange)), 3);
+aPDC = aPDC-triu(tril(aPDC));
 
 MaxValue = max([max(max(mPDC)) ...
-%     max(max(mDTF))...
+    max(max(aPDC))...
     ]);
 
 threshold_pdc = 0.9;
@@ -59,15 +70,35 @@ while 1
 end
 mPDC = temp;
 
-fileID = fopen('channel_locations.txt','r');
-data=textscan(fileID,'%u%s%f%f');
-fclose(fileID);
+figure; 
+subplot(1,2,1);
+imagesc(mPDC); colorbar;
+title('PDC')
+% set(gca,'XTick',1:4:nNodes)
+% set(gca,'YTick',1:4:nNodes)
+% caxis([0 MaxValue])
+xlabel(['Threshold = ' num2str(threshold_pdc) ' Density = 20%']);
+axis square
 
-chosen_index = sort(chosen_index);
-gObj = biograph(adjacency_matrix_pdc, chosen_channels);
-for i=1:nNodes
-    index = find(strcmp(gObj.Nodes(i).ID , open_eyes_header.label));
-   gObj.nodes(i).Position = [data{3}(index) data{4}(index)];
-end
-view(gObj);
+subplot(1,2,2);
+imagesc(aPDC); colorbar;
+title('Asymptotic PDC')
+% set(gca,'XTick',1:4:nNodes)
+% set(gca,'YTick',1:4:nNodes)
+% caxis([0 MaxValue])
+xlabel(['Alpha = 5%']);
+axis square
+
+
+% fileID = fopen('channel_locations.txt','r');
+% data=textscan(fileID,'%u%s%f%f');
+% fclose(fileID);
+% 
+% chosen_index = sort(chosen_index);
+% gObj = biograph(adjacency_matrix_pdc, chosen_channels);
+% for i=1:nNodes
+%     index = find(strcmp(gObj.Nodes(i).ID , open_eyes_header.label));
+%    gObj.nodes(i).Position = [data{3}(index) data{4}(index)];
+% end
+% view(gObj);
 

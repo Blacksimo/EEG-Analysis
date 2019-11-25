@@ -4,13 +4,24 @@ density_values = [0.01 0.05 0.1 0.2 0.3 0.5];
 all_densities = {};
 
 nNodes = 64;
-[open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
-open_eyes_annotation = open_eyes_record(65,:);
-open_eyes_record = open_eyes_record(1:64,:);
 
-Y = open_eyes_record(1:64,:);
+% Open Eyes Record
+% [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
+% open_eyes_annotation = open_eyes_record(65,:);
+% open_eyes_record = open_eyes_record(1:64,:);
+% 
+% Y = open_eyes_record(1:64,:);
+% Closed Eyes Record
+[closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
+closed_eyes_annotation = closed_eyes_record(65,:);
+closed_eyes_record = closed_eyes_record(1:64,:);
 
-[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Y, 30, 160);
+Y = closed_eyes_record(1:64,:);
+
+nFreqs = 30;
+freq_samples = 160;
+AR = idMVAR(Y, nFreqs);
+[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(AR, nFreqs, freq_samples);
 freqRange = 8:13;
 mPDC = mean(real(PDC(:,:,freqRange)), 3);
 mPDC = mPDC-triu(tril(mPDC));
@@ -63,5 +74,6 @@ for d=1:size(density_values,2)
     subplot(2,6,7+(1*d-1));
     imagesc(temp); colorbar;
     caxis([0 MaxValue])
+    xlabel(['Threshold = ' num2str(threshold_pdc) ' Density = ' num2str(density_values(d)*100) '%']);
     axis square
 end

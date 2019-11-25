@@ -1,13 +1,23 @@
 clear
 addpath(genpath('emVAR'))
 nNodes = 64;
-[open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
-open_eyes_annotation = open_eyes_record(65,:);
-open_eyes_record = open_eyes_record(1:64,:);
+% Open Eyes Record
+% [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
+% open_eyes_annotation = open_eyes_record(65,:);
+% open_eyes_record = open_eyes_record(1:64,:);
+% 
+% Y = open_eyes_record(1:64,:);
+% Closed Eyes Record
+[closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
+closed_eyes_annotation = closed_eyes_record(65,:);
+closed_eyes_record = closed_eyes_record(1:64,:);
 
-Y = open_eyes_record(1:64,:);
+Y = closed_eyes_record(1:64,:);
 
-[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(Y, 30, 160);
+nFreqs = 30;
+freq_samples = 160;
+AR = idMVAR(Y, nFreqs);
+[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(AR, nFreqs, freq_samples);
 freqRange = 14:30;
 mPDC = mean(real(PDC(:,:,freqRange)), 3);
 mPDC = mPDC-triu(tril(mPDC));
@@ -76,25 +86,29 @@ mDTF = temp;
 
 figure; 
 subplot(2,2,1);
+title('PDC Adjacency Matrix')
 spy(adjacency_matrix_pdc);
 subplot(2,2,2);
+title('DTF Adjacency Matrix')
 spy(adjacency_matrix_dtf);
 
 subplot(2,2,3);
 imagesc(mPDC); colorbar;
 title('PDC')
-set(gca,'XTick',1:4:nNodes)
-set(gca,'YTick',1:4:nNodes)
+% set(gca,'XTick',1:4:nNodes)
+% set(gca,'YTick',1:4:nNodes)
 caxis([0 MaxValue])
+xlabel(['Threshold = ' num2str(threshold_pdc) ' Density = 20%']);
 axis square
 
 
 subplot(2,2,4);
 imagesc(mDTF); colorbar;
 title('DTF')
-set(gca,'XTick',1:4:nNodes)
-set(gca,'YTick',1:4:nNodes)
+% set(gca,'XTick',1:4:nNodes)
+% set(gca,'YTick',1:4:nNodes)
 caxis([0 MaxValue])
+xlabel(['Threshold = ' num2str(threshold_dtf) ' Density = 20%']);
 axis square
 
 %%%%%%%%%%%%%%%%%%% Fine punto 1.2 %%%%%%%%%%%%%%%%%%%

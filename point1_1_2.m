@@ -2,14 +2,24 @@ clear
 %addpath(genpath('emVAR'))
 nNodes = 64;
 metric = 'euc'; 
-[open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
-open_eyes_annotation = open_eyes_record(65,:);
-open_eyes_record = open_eyes_record(1:64,:);
+freq_samples = 160;
+% Open Eyes Record
+% [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
+% open_eyes_annotation = open_eyes_record(65,:);
+% open_eyes_record = open_eyes_record(1:64,:);
+% 
+% Y = open_eyes_record(1:64,:);
+% Closed Eyes Record
+[closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
+closed_eyes_annotation = closed_eyes_record(65,:);
+closed_eyes_record = closed_eyes_record(1:64,:);
+
+Y = closed_eyes_record(1:64,:);
+
 nFreqs = 30; %oppure 7 ?????
-Y = open_eyes_record(1:64,:);
 
 AR = idMVAR(Y, nFreqs);
-[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(AR, nFreqs, 160);
+[DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(AR, nFreqs, freq_samples);
 
 % PDC = pdc_alg(Y,nFreqs,metric);
 freqRange = 8:13;
@@ -93,7 +103,7 @@ title('PDC')
 % set(gca,'XTick',1:4:nNodes)
 % set(gca,'YTick',1:4:nNodes)
 caxis([0 MaxValue])
-xlabel(['Threshold = ' int2str(threshold_pdc) ' Density = 20%']);
+xlabel(['Threshold = ' num2str(threshold_pdc) ' Density = 20%']);
 axis square
 
 
@@ -103,7 +113,7 @@ title('DTF')
 % set(gca,'XTick',1:4:nNodes)
 % set(gca,'YTick',1:4:nNodes)
 caxis([0 MaxValue])
-xlabel(['Threshold = ' int2str(threshold_dtf) ' Density = 20%']);
+xlabel(['Threshold = ' num2str(threshold_dtf) ' Density = 20%']);
 axis square
 
 %%%%%%%%%%%%%%%%%%% Fine punto 1.2 %%%%%%%%%%%%%%%%%%%
