@@ -18,9 +18,10 @@ Y = closed_eyes_record(1:64,:);
 
 nFreqs = 30; %oppure 7 ?????
 
+nFreqs = 30;
+freq_samples = 160;
 AR = idMVAR(Y, nFreqs);
 [DC,DTF,PDC,GPDC,COH,PCOH,PCOH2,H,S,P,f] = fdMVAR(AR, nFreqs, freq_samples);
-
 % PDC = pdc_alg(Y,nFreqs,metric);
 freqRange = 8:13;
 mPDC = mean(real(PDC(:,:,freqRange)), 3);
