@@ -2,17 +2,17 @@ clear
 % addpath(genpath('emVAR'))
 nNodes = 64;
 % Open Eyes Record
-% [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
-% open_eyes_annotation = open_eyes_record(65,:);
-% open_eyes_record = open_eyes_record(1:64,:);
-% 
-% Y = open_eyes_record(1:64,:);
-% Closed Eyes Record
-[closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
-closed_eyes_annotation = closed_eyes_record(65,:);
-closed_eyes_record = closed_eyes_record(1:64,:);
+[open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
+open_eyes_annotation = open_eyes_record(65,:);
+open_eyes_record = open_eyes_record(1:64,:);
 
-Y = closed_eyes_record(1:64,:);
+Y = open_eyes_record(1:64,:);
+% Closed Eyes Record
+% [closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
+% closed_eyes_annotation = closed_eyes_record(65,:);
+% closed_eyes_record = closed_eyes_record(1:64,:);
+% 
+% Y = closed_eyes_record(1:64,:);
 
 nFreqs = 30;
 freq_samples = 160;
@@ -88,7 +88,7 @@ mPDC = temp;
 %%%%%%%%%%%%%%%%%%%%% DA QUI INIZIO IL PUNTO 2.1 %%%%%%%%%%%%%%%%%%%
 
 
-G = digraph(adjacency_matrix_pdc, closed_eyes_header.label(1:64));
+G = digraph(adjacency_matrix_pdc, open_eyes_header.label(1:64));
 
 fileID = fopen('channel_locations.txt','r');
 data=textscan(fileID,'%u%s%f%f');

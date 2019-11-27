@@ -3,14 +3,14 @@ addpath(genpath('emVAR'))
 nNodes = 19;
 freqRange = 8:13;
 % Open Eyes Record
-% [open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
-% open_eyes_annotation = open_eyes_record(65,:);
-% open_eyes_record = open_eyes_record(1:64,:);
-
-% Closed Eyes Record
-[open_eyes_header, open_eyes_record] = edfread('data/S070R02.edf');
+[open_eyes_header, open_eyes_record] = edfread('data/S070R01.edf');
 open_eyes_annotation = open_eyes_record(65,:);
 open_eyes_record = open_eyes_record(1:64,:);
+
+% Closed Eyes Record
+% [closed_eyes_header, closed_eyes_record] = edfread('data/S070R02.edf');
+% closed_eyes_annotation = closed_eyes_record(65,:);
+% closed_eyes_record = closed_eyes_record(1:64,:);
 
 chosen_channels = {'Fp1'  'Fp2'   'F7'   'F3'   'Fz'   'F4'   'F8'   'T7'   'C3'   'Cz'   'C4'   'T8'   'P7'   'P3'   'Pz'   'P4'  'P8'   'O1'   'O2'};
 chosen_index = zeros();
