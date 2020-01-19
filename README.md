@@ -1,5 +1,7 @@
 # EEG-Analysis
 
+The complete report can be found [HERE](/bioinf_proj_neuro_group09.pdf)
+
 ## Introduction
 
 Electroencephalography (EEG) is an electrophysiological monitoring
@@ -92,7 +94,7 @@ Fig.[\[fig:OpenEYE1.6\]](#fig:OpenEYE1.6) and
 Fig.[\[fig:ClosedEYE1.6\]](#fig:ClosedEYE1.6), were we can see that our
 brain regions are frequency-specific.
 
-## Graph Theory Indices
+### Graph Theory Indices
 
 From now on, if not specifically mentioned, we are gonna make use of
 signals from 64 channels in the range of alpha waves and a network
@@ -123,8 +125,6 @@ easiness of nodes to communicate between each other.
 
 Average Best Path Length
 
-<span id="tab:path_length" label="tab:path_length">\[tab:path\_length\]</span>
-
 The use of graphs allows us to analyze other important features of the
 connections that are established in a network, such as the
 **in-degrees**, **out-degree** that correspond respectively to the
@@ -145,7 +145,7 @@ Fig.[\[fig:OpenEYE2\_7\_cc\]](#fig:OpenEYE2_7_cc) and
 Fig.[\[fig:ClosedEYE2\_7\_cc\]](#fig:ClosedEYE2_7_cc) are shown results
 of clustering coefficients for both dataset.
 
-## Motif Analysis
+### Motif Analysis
 
 Another aspect of the representation of the neural network, that can be
 deducted from the graph, concern the presence of **Motif**. It
@@ -177,7 +177,7 @@ isomorphisms are 199 and in Fig.[\[fig:OpenEYE3\_4\]](#fig:OpenEYE3_4)
 and Fig.[\[fig:ClosedEYE3\_4\]](#fig:ClosedEYE3_4) are shown the results
 obtained on the 64 channels network.
 
-## Community Detection
+### Community Detection
 
 Finally in Fig.[\[fig:OpenEYE4\_1\]](#fig:OpenEYE4_1) and
 Fig.[\[fig:ClosedEYE4\_1\]](#fig:ClosedEYE4_1) are shown, respectively
@@ -199,9 +199,7 @@ connections.
 
 Number of the communities and nodes
 
-<span id="tab:community_detection" label="tab:community_detection">\[tab:community\_detection\]</span>
-
-# Conclusion
+## Conclusion
 
 To conclude, the brain studies through the use of graph theory allow us
 to unearth useful information about data flow and its distribution
